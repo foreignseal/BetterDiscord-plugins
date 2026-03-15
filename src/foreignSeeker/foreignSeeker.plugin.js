@@ -2,7 +2,7 @@
  * @name foreignSeeker
  * @author foreignSeal
  * @authorLink https://github.com/foreignSeal
- * @version 1.0.2
+ * @version 1.0.3
  * @description A way to look at server channels in a foreign way.
  * @website https://github.com/foreignSeal/BetterDiscord-plugins
  * @source https://github.com/foreignSeal/BetterDiscord-plugins/blob/main/src/foreignSeeker/foreignSeeker.plugin.js
@@ -27,7 +27,7 @@ module.exports = class foreignSeeker {
 
   // 🦭 ┊  Patches
   _patchChannelContextMenu() {
-    this._channelPatch("channel-context", (returnValue, props) => {
+    this._channelPatch = ("channel-context", (returnValue, props) => {
       const channel = props.channel;
       if (!channel) return;
 
@@ -41,7 +41,7 @@ module.exports = class foreignSeeker {
   }
 
   _patchCategoryContextMenu() {
-    this._categoryPatch("channel-context", (returnValue, props) => {
+    this._categoryPatch = ("channel-context", (returnValue, props) => {
       const category = props.channel;
       if (!category || category.type !== 4) return;
 
