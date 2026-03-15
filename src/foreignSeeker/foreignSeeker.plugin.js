@@ -2,7 +2,7 @@
  * @name foreignSeeker
  * @author foreignSeal
  * @authorLink https://github.com/foreignSeal
- * @version 1.1.0
+ * @version 1.1.1
  * @description A way to look at server channels in a foreign way.
  * @website https://github.com/foreignSeal/BetterDiscord-plugins
  * @source https://github.com/foreignSeal/BetterDiscord-plugins/blob/main/src/foreignSeeker/foreignSeeker.plugin.js
@@ -63,18 +63,6 @@ module.exports = class foreignSeeker {
     // Look for target sibling
     const groups = returnValue?.props?.children;
     if(!Array.isArray(groups)) return;
-
-    // Devmode check
-    for (const group of groups) {
-      const children = group?.props?.children;
-      if (!Array.isArray(children)) continue;
-
-      const idx = children.findIndex((item) => item?.props?.id.startsWith("devmode-copy-id"));
-      if (idx !== -1) {
-        children.splice(idx + 1, 0, copyItem);
-        return;
-      }
-    }
 
     // Devmode not found || Fallback
     const newGroup = BdApi.ContextMenu.buildItem({ type: "separator" });
