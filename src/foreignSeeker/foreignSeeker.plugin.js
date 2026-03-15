@@ -2,7 +2,7 @@
  * @name foreignSeeker
  * @author foreignSeal
  * @authorLink https://github.com/foreignSeal
- * @version 1.0.1
+ * @version 1.0.2
  * @description A way to look at server channels in a foreign way.
  * @website https://github.com/foreignSeal/BetterDiscord-plugins
  * @source https://github.com/foreignSeal/BetterDiscord-plugins/blob/main/src/foreignSeeker/foreignSeeker.plugin.js
@@ -20,14 +20,14 @@ module.exports = class foreignSeeker {
   stop() {
     // Unpatch all modifications and clean up
     BdApi.Patcher.unpatchAll("foreignSeeker");
-    document
-      .querySelectorAll(".foreign-seeker-item")
-      .forEach((el) => el.remove());
+    // Manual unpatch for context menus
+    BdApi.ContextMenu.unpatch("channel-context", this._channelPatch);
+    BdApi.ContextMenu.unpatch("channel-context", this._categoryPatch);
   }
 
   // 🦭 ┊  Patches
   _patchChannelContextMenu() {
-    BdApi.ContextMenu.patch("channel-context", (returnValue, props) => {
+    this._channelPatch("channel-context", (returnValue, props) => {
       const channel = props.channel;
       if (!channel) return;
 
@@ -37,15 +37,17 @@ module.exports = class foreignSeeker {
       const channelName = this._resolveChannelName(channel);
       this._injectCopyItem(returnValue, "Copy Channel Name", channelName, "copy-channel-id");
     });
+    BdApi.ContextMenu.patch("channel-context", this._channelPatch);
   }
 
   _patchCategoryContextMenu() {
-    BdApi.ContextMenu.patch("channel-context", (returnValue, props) => {
+    this._categoryPatch("channel-context", (returnValue, props) => {
       const category = props.channel;
       if (!category || category.type !== 4) return;
 
       this._injectCopyItem(returnValue, "Copy Category Name", category.name ?? category.id, "copy-category-id");
     });
+    BdApi.ContextMenu.patch("channel-context", this._categoryPatch);
   }
 
   // 🦭 ┊  Context Menu Injection
@@ -63,8 +65,8 @@ module.exports = class foreignSeeker {
         })
       ),
       action: () => {
-        DiscordNative.clipboard.copy(channelName);
-        BdApi.UI.showToast(`Copied: ${channelName}`, { type: "success", timeout: 2000, });
+        DiscordNative.clipboard.copy(value);
+        BdApi.UI.showToast(`Copied: ${value}`, { type: "success", timeout: 2000, });
       },
     });
 
@@ -76,7 +78,7 @@ module.exports = class foreignSeeker {
       const children = group?.props?.children;
       if (!Array.isArray(children)) continue;
 
-      const idx = children.findIndex((item) => item?.props?.id === targetId);
+      const idx = children.findIndex((item) => item?.props?.id === itemId);
       if (idx !== -1) {
         children.splice(idx + 1, 0, copyItem);
         return;
