@@ -5,10 +5,10 @@
  * @version 1.0.0
  * @description A way to look at server channels in a foreign way.
  * @website https://github.com/foreignSeal/BetterDiscord-plugins
- * @source https://github.com/foreignSeal/BetterDiscord-plugins/tree/master/src/foreignSeeker/foreignSeeker.plugin.js
+ * @source https://github.com/foreignSeal/BetterDiscord-plugins/blob/main/src/foreignSeeker/foreignSeeker.plugin.js
  */
 
-MediaSourceHandle.exports = class foreignSeeker {
+module.exports = class foreignSeeker {
 
   // 🦭 ┊  Init
   start() {
@@ -16,7 +16,8 @@ MediaSourceHandle.exports = class foreignSeeker {
   }
 
   stop() {
-    BdApi.Patcher.unpachAll("foreignSeeker");
+    // Unpatch all modifications and clean up
+    BdApi.Patcher.unpatchAll("foreignSeeker");
     document
       .querySelectorAll(".foreign-seeker-item")
       .forEach((el) => el.remove());
