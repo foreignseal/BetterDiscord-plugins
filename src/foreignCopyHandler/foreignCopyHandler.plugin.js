@@ -1,15 +1,15 @@
 /**
- * @name foreignSeeker
+ * @name foreignCopyHandler
  * @author foreignSeal
  * @authorLink https://github.com/foreignSeal
- * @version 1.1.1
- * @description A way to look at server channels in a foreign way.
+ * @version 1.2.0
+ * @description Get the channel/category name by right clicking them!
  * @website https://github.com/foreignSeal/BetterDiscord-plugins
- * @source https://github.com/foreignSeal/BetterDiscord-plugins/blob/main/src/foreignSeeker/foreignSeeker.plugin.js
- * @updateUrl https://raw.githubusercontent.com/foreignSeal/BetterDiscord-plugins/refs/heads/main/src/foreignSeeker/foreignSeeker.plugin.js
+ * @source https://github.com/foreignSeal/BetterDiscord-plugins/blob/main/src/foreignCopyHandler/foreignCopyHandler.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/foreignSeal/BetterDiscord-plugins/refs/heads/main/src/foreignCopyHandler/foreignCopyHandler.plugin.js
  */
 
-module.exports = class foreignSeeker {
+module.exports = class foreignCopyHandler {
 
   // 🦭 ┊  Init
   start() {
@@ -17,9 +17,7 @@ module.exports = class foreignSeeker {
   }
 
   stop() {
-    // Unpatch all modifications and clean up
-    BdApi.Patcher.unpatchAll("foreignSeeker");
-    // Manual unpatch for context menus
+    BdApi.Patcher.unpatchAll("foreignCopyHandler");
     BdApi.ContextMenu.unpatch("channel-context", this._channelPatch);
   }
 
